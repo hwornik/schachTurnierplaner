@@ -41,7 +41,7 @@ public class Teilnehmer extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                storeNewName();
+                //storeNewName();
                 finish();
             }
         });
@@ -58,13 +58,81 @@ public class Teilnehmer extends AppCompatActivity {
     private void storeNewName() {
 
         String newname=intext.getText().toString();
-        int anzahl=teilnListe.size();
+        int anzahl=teilnListe.size(),elem=0;
         boolean inserted=false;
-        while(!inserted)
-        {
+        int first=0,last=anzahl;
+        if(newname.length()>0 ) {
+            if(anzahl>0) {
+                elem=anzahl/2;
+                while (!inserted) {
+                    if(elem<0)
+                    {
+                        break;
+                    }
+                    else {
+                        if(teilnListe.get(elem - 1).charAt(0)>newname.charAt(0))
+                        {
+                            last=elem;
+                            elem-=(last-first)/2;
+                        }
+                        else if(teilnListe.get(elem - 1).charAt(0)==newname.charAt(0))
+                        {
+                            if(elem>=anzahl)
+                            {
+                                teilnListe.add(newname);
+                                inserted=true;
+                            }
+                            else {
+                                for (int i = elem - 1; i < anzahl; i++) {
+                                    if (teilnListe.get(i).charAt(0) > newname.charAt(0)) {
+                                        insertList(newname, i,teilnListe);
+                                        inserted=true;;
+                                    }
+                                }
+                            }
+                        }else
+                        {
+                            first=elem;
+                            elem+=(last-first)/2;
+                        }
+                        if(last==first)
+                        {
+                            insertList(newname, first,teilnListe);
+                            inserted=true;
+                        }
+                    }
+                }
+            }else
+            {
+                this.writeToFile(newname+";",getApplicationContext());
+            }
 
         }
 
+    }
+
+    private void insertList(String newname, int first, ArrayList<String> teilnListe) {
+        int anzahl=teilnListe.size();
+        if(anzahl==first)
+        {
+            if(teilnListe.get(first).charAt(0)>newname.charAt(0))
+            {
+                teilnListe.add(teilnListe.get(first));
+                teilnListe.set(first-1,newname);
+            }else
+            {
+                teilnListe.add(newname);
+            }
+        }
+        else{
+            teilnListe.add(newname);
+            for(int i=anzahl;i<first;i)
+            {
+                teilnListe.set(i+1,teilnListe.get(i))
+            }
+            teilnListe.set(first,newname);
+
+        }
     }
 
     private void showInputMask(){
