@@ -56,7 +56,15 @@ public class Teilnehmer extends AppCompatActivity {
     }
 
     private void storeNewName() {
+
         String newname=intext.getText().toString();
+        int anzahl=teilnListe.size();
+        boolean inserted=false;
+        while(!inserted)
+        {
+
+        }
+
     }
 
     private void showInputMask(){
