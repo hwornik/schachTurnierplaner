@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -62,49 +63,53 @@ public class Teilnehmer extends AppCompatActivity {
         boolean inserted=false;
         int first=0,last=anzahl;
         if(newname.length()>0 ) {
-            if(anzahl>0) {
-                elem=anzahl/2;
+            if (anzahl > 1) {
+                elem = anzahl / 2;
                 while (!inserted) {
-                    if(elem<0)
-                    {
+                    if (elem < 0) {
                         return;
-                    }
-                    else {
-                        if(teilnListe.get(elem - 1).charAt(0)>newname.charAt(0))
-                        {
-                            last=elem;
-                            elem-=(last-first)/2;
-                        }
-                        else if(teilnListe.get(elem - 1).charAt(0)==newname.charAt(0))
-                        {
-                            if(elem>=anzahl)
-                            {
+                    } else {
+                        if (teilnListe.get(elem - 1).charAt(0) > newname.charAt(0)) {
+                            last = elem;
+                            elem -= (last - first) / 2;
+                        } else if (teilnListe.get(elem - 1).charAt(0) == newname.charAt(0)) {
+                            if (elem >= anzahl) {
                                 teilnListe.add(newname);
-                                inserted=true;
-                            }
-                            else {
+                                inserted = true;
+                            } else {
                                 for (int i = elem - 1; i < anzahl; i++) {
                                     if (teilnListe.get(i).charAt(0) > newname.charAt(0)) {
-                                        insertList(newname, i,teilnListe);
-                                        inserted=true;;
+                                        insertList(newname, i, teilnListe);
+                                        inserted = true;
+                                        ;
                                     }
                                 }
                             }
-                        }else
-                        {
-                            first=elem;
-                            elem+=(last-first)/2;
+                        } else {
+                            first = elem;
+                            elem += (last - first) / 2;
                         }
-                        if(last==first)
-                        {
-                            insertList(newname, first,teilnListe);
-                            inserted=true;
+                        if (last == first) {
+                            insertList(newname, first, teilnListe);
+                            inserted = true;
                         }
                     }
                 }
-            }else
-            {
-                this.writeToFile(newname+";",getApplicationContext());
+            } else {
+                if(anzahl==0) {
+                    this.writeToFile(newname + ";", getApplicationContext());
+                    return;
+                }
+                else
+                {
+                    if(teilnListe.get(0).charAt(0) > newname.charAt(0))
+                    {
+                        insertList(newname, 0, teilnListe);
+                    }
+                    else {
+                        insertList(newname, 1, teilnListe);
+                    }
+                }
             }
 
         }
@@ -113,32 +118,24 @@ public class Teilnehmer extends AppCompatActivity {
         {
             newname+=teilnListe.get(i);
         }
-        this.writeToFile(newname,getApplicationContext());
+        this.writeToFile(newname+";",getApplicationContext());
 
     }
 
     private void insertList(String newname, int first, ArrayList<String> teilnListe) {
         int anzahl=teilnListe.size();
-        if(anzahl==first)
-        {
-            if(teilnListe.get(first).charAt(0)>newname.charAt(0))
-            {
-                teilnListe.add(teilnListe.get(first));
-                teilnListe.set(first-1,newname);
-            }else
-            {
-                teilnListe.add(newname);
-            }
-        }
-        else{
             teilnListe.add(newname);
-            for(int i=anzahl;i<first;i--)
+            if(first==anzahl)
             {
-                teilnListe.set(i+1,teilnListe.get(i));
+                return;
             }
-            teilnListe.set(first,newname);
-
-        }
+            else {
+                for (int i = anzahl; i < first + 1; i--) {
+                    teilnListe.set(i + 1, teilnListe.get(i));
+                }
+                teilnListe.set(first, newname);
+            }
+            return;
     }
 
     private void showInputMask(){

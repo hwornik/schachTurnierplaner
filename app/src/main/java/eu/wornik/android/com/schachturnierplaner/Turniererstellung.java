@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -42,7 +43,7 @@ public class Turniererstellung extends AppCompatActivity {
         setContentView(R.layout.activity_turniererstellung);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        this.readFromFile(getApplicationContext());
+        //this.readFromFile(getApplicationContext());
         this.drawTeilnehmerAuswahl();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(awesomeOnClickListener);
@@ -93,13 +94,14 @@ public class Turniererstellung extends AppCompatActivity {
 
     private void drawTeilnehmerAuswahl(){
         layout = (RelativeLayout)findViewById(R.id.inhalte_turnier);
-
+        String inputtxt=this.readFromFile(getApplicationContext());
+        Toast.makeText(getApplicationContext(), inputtxt, Toast.LENGTH_SHORT).show();
         Random rnd = new Random();
         int prevTextViewId = 0;
         for(int i = 0; i < 10; i++)
         {
             final TextView textView = new TextView(this);
-            textView.setText("Text "+i);
+            textView.setText(inputtxt);
             textView.setTextColor(rnd.nextInt() | 0xff000000);
 
             int curTextViewId = prevTextViewId + 1;
