@@ -41,7 +41,7 @@ public class Teilnehmer extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //storeNewName();
+                storeNewName();
                 finish();
             }
         });
@@ -67,7 +67,7 @@ public class Teilnehmer extends AppCompatActivity {
                 while (!inserted) {
                     if(elem<0)
                     {
-                        break;
+                        return;
                     }
                     else {
                         if(teilnListe.get(elem - 1).charAt(0)>newname.charAt(0))
@@ -108,6 +108,12 @@ public class Teilnehmer extends AppCompatActivity {
             }
 
         }
+        newname="";
+        for(int i=0;i<teilnListe.size();i++)
+        {
+            newname+=teilnListe.get(i);
+        }
+        this.writeToFile(newname,getApplicationContext());
 
     }
 
@@ -126,9 +132,9 @@ public class Teilnehmer extends AppCompatActivity {
         }
         else{
             teilnListe.add(newname);
-            for(int i=anzahl;i<first;i)
+            for(int i=anzahl;i<first;i--)
             {
-                teilnListe.set(i+1,teilnListe.get(i))
+                teilnListe.set(i+1,teilnListe.get(i));
             }
             teilnListe.set(first,newname);
 
